@@ -15,23 +15,28 @@ public class Calculator {
         int checker = in.nextInt();
         in.close();
 
-        if (number.contains("i")) {
+        // Проверяем комплексные ли числа
+        if (number.contains("i")) { 
             ArrayList<String> numsOperation = new ArrayList<String>();
-            number = number.replace("-", " -");
+            // Добавляем пробел к знакам + и - чтобы можно было разбить выражение на составляющие и поместить в массив.
+            number = number.replace("-", " -"); 
             number = number.replace("+", " +");
             String[] nums = number.split(" ");
             for (int i = 0; i < nums.length; i++) {
-                if (nums[i].isEmpty()) {
+                // Если первое комплексное число в выражении отрицательное, то в массиве первый параметр будет пустой, проверяем так ли это
+                if (nums[i].isEmpty()) { 
                 } else {
-                    numsOperation.add(nums[i].replace("+",""));
+                    // Удаляем лишние знаки, оставшиеся от выражения. 
+                    numsOperation.add(nums[i].replace("+","")); 
                 }
             }
+
+            // Из полученного массива помещаем данные в новый класс Complex (состоит из двух переменных типа Double), парсим строки в числа.
             Complex operationNums1 = new Complex(Double.parseDouble(numsOperation.get(0)), Double.parseDouble(numsOperation.get(1).replace("i", "")));
             Complex operationNums2 = new Complex(Double.parseDouble(numsOperation.get(2)), Double.parseDouble(numsOperation.get(3).replace("i", "")));
-
-            System.out.println(numsOperation);
             Complex result = new Complex(0.0, 0.0);
             
+            // Вызываем метод, соответствующий типу выбранной операции.
             if (checker == 1) {
                 result.addition(operationNums1, operationNums2);
             }
@@ -46,7 +51,10 @@ public class Calculator {
             } else { 
                 System.out.println("Некорректный выбор типа операции");
             }
+            // Вызываем метод для записи в файл лога. 
             result.printComplex(result);
+        
+        // Блок для операций, если числа не мнимые. Логика такая же как в блоке выше. Опираясь на выбранный тип операции выполняем соответствующие действия.
         } else {
             Double realNumber = 0.0;
             String[] numsReal = number.split(" ");
@@ -64,6 +72,7 @@ public class Calculator {
             } else { 
                 System.out.println("Некорректный выбор типа операции");
             }
+            // У мнимых чисел сложные методы для совершения операций, в них заложена запись в лог. Тут всё проще, поэтому метод для записи в лог вызываем отдельно.
             Logger dataForFile = new Logger(Double.toString(realNumber)+"\n");
             dataForFile.logger(dataForFile);
             System.out.println(realNumber);
